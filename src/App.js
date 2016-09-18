@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import ServerLog from './ServerLog.js';
 import { connect as io } from 'socket.io-client';
 
 var socket = io('http://localhost:3001');
@@ -8,13 +9,6 @@ socket.connect('http://localhost/foobar', { autoConnect: true});
 class App extends Component {
   componentDidMount() {
     const that = this;
-    socket.on('chat message', function(msg){
-      that.setState({chatMessages: that.state.chatMessages.concat([msg])});
-    });
-
-    socket.on('user action', function(msg){
-      that.setState({chatMessages: that.state.chatMessages.concat([msg])});
-    });
 
     socket.on('user state', function(msg){
       that.setState({gold: msg});
@@ -23,27 +17,13 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.handleChatSubmit = this.handleChatSubmit.bind(this);
-    this.handleChatTyping = this.handleChatTyping.bind(this);
     this.handleActionSubmit = this.handleActionSubmit.bind(this);
     this.handleBetChange = this.handleBetChange.bind(this);
 
     this.state = {
-      chatMessages: [],
-      chatInputValue: '',
       gold: 0,
       selectedTarget: "1"
     };
-  }
-
-  handleChatTyping(event) {
-    this.setState({chatInputValue: event.target.value});
-  }
-
-  handleChatSubmit(event) {
-    event.preventDefault();
-    socket.emit('chat message', this.state.chatInputValue);
-    this.setState({chatInputValue: ''});
   }
 
   handleActionSubmit(event) {
@@ -59,17 +39,7 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <div className="server-log">
-          <ul id="messages">
-            {this.state.chatMessages.map((message, i) => {
-              return <li key={i}>{message}</li>;
-            })}
-          </ul>
-          <form className="chat-form" action="" onSubmit={this.handleChatSubmit}>
-            <input id="m" autoComplete="off" value={this.state.chatInputValue} onChange={this.handleChatTyping} />
-            <button>Send</button>
-          </form>
-        </div>
+        <ServerLog socket={socket} />
         <div className="user-actions">
           <div className="gold">Gold: {this.state.gold}</div>
           <form className="action-form" action="" onSubmit={this.handleActionSubmit}>
