@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 
 class ServerLog extends Component {
   constructor(props) {
@@ -15,10 +16,12 @@ class ServerLog extends Component {
     const that = this;
     that.props.socket.on('chat message', function(msg){
       that.setState({chatMessages: that.state.chatMessages.concat([msg])});
+      ReactDOM.findDOMNode(that).scrollTop = 10000000;
     });
 
     that.props.socket.on('user action', function(msg){
       that.setState({chatMessages: that.state.chatMessages.concat([msg])});
+      ReactDOM.findDOMNode(that).scrollTop = 10000000;
     });
   }
 
