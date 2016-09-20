@@ -4,8 +4,8 @@ import ServerLog from './ServerLog.js';
 import UserActions from './UserActions.js';
 import { connect as io } from 'socket.io-client';
 
-var socket = io('http://localhost:3001');
-socket.connect('http://localhost/foobar', { autoConnect: true});
+var socket = io('SOCKET_SERVER_URL');
+socket.connect('SOCKET_SERVER_URL', { autoConnect: true});
 
 class App extends Component {
   render() {

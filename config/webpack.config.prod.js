@@ -161,6 +161,16 @@ module.exports = {
         query: {
           attrs: ['link:href'],
         }
+      },
+
+      {
+        test: /App\.js$/,
+        loader: 'string-replace',
+        query: {
+          search: 'SOCKET_SERVER_URL',
+          replace: process.env.SOCKET_SERVER_URL,
+          flags: 'g'
+        }
       }
     ]
   },
