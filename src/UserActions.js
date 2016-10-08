@@ -15,17 +15,16 @@ class UserActions extends Component {
 
   componentDidMount() {
     const that = this;
-    let reader = new FileReader();
-    reader.onload = function(e) {
-      that.setState({imageData: e.target.result});
-    };
-
     that.props.socket.on('user state', function(msg){
       that.setState({gold: msg});
     });
 
     that.props.socket.on('map state', function(msg){
+      let reader = new FileReader();
       let blob = new Blob([msg], {type: "image/png"});
+      reader.onload = function(e) {
+        that.setState({imageData: e.target.result});
+      };
       reader.readAsDataURL(blob);
     });
   }
