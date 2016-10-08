@@ -8,15 +8,25 @@ class UserActions extends Component {
 
     this.state = {
       gold: 0,
-      selectedTarget: "1"
+      selectedTarget: "1",
+      imgData: ""
     };
   }
 
   componentDidMount() {
     const that = this;
+    let reader = new FileReader();
+    reader.onload = function(e) {
+      that.setState({imageData: e.target.result});
+    };
 
     that.props.socket.on('user state', function(msg){
       that.setState({gold: msg});
+    });
+
+    that.props.socket.on('map state', function(msg){
+      let blob = new Blob([msg], {type: "image/png"});
+      reader.readAsDataURL(blob);
     });
   }
 
@@ -34,6 +44,7 @@ class UserActions extends Component {
     return (
       <div className="user-actions">
         <div className="gold">Gold: {this.state.gold}</div>
+        <img src={this.state.imageData} role="presentation"></img>
         <form className="action-form" action="" onSubmit={this.handleActionSubmit}>
           <select value={this.state.selectedTarget} onChange={this.handleBetChange}>
             <option value="1">Jam</option>
