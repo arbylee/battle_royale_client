@@ -158,7 +158,7 @@ module.exports = {
         loader: 'string-replace',
         query: {
           search: 'SOCKET_SERVER_URL',
-          replace: 'http://localhost:3001',
+          replace: process.env.SOCKET_SERVER_URL,
           flags: 'g'
         }
       }

@@ -59,8 +59,10 @@
     "socket.io-client": "^1.4.8"
   },
   "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "start": "SOCKET_SERVER_URL=http://localhost:3001 node scripts/start.js",
+    "build": "SOCKET_SERVER_URL=http://localhost:3001 node scripts/build.js && docker build -t battle_client .",
+    "serve": "docker run -p 3000:80 --name battle_royale_client -d battle_client",
+    "clean": "docker stop battle_royale_client && docker rm battle_royale_client",
     "test": "jest --watch --env=jsdom"
   },
   "eslintConfig": {
